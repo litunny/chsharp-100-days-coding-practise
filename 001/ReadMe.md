@@ -163,3 +163,7 @@
         return value.ToUpper();
     }
   ```
+  
+  ### References
+  * https://docs.microsoft.com/en-us/dotnet/api/system.func-1?view=net-5.0
+  * https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-parameter-modifier
