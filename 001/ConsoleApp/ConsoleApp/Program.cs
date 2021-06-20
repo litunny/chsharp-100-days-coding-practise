@@ -1,21 +1,45 @@
 ﻿using System;
+using System.Linq;
 
 namespace ConsoleApp
 {
     public class Program
     {
+        delegate string CustomSelector(string value, int index);
+        delegate TResult CustomSelectorTwo <in T, in R, out TResult>(T value, R index);
+
         static void Main(string[] args)
         {
-            // Note that each lambda expression has no parameters.
-            LazyValue<int> lazyOne = new LazyValue<int>(() => ExpensiveOne());
-            LazyValue<long> lazyTwo = new LazyValue<long>(() => ExpensiveTwo("apple"));
+            //// Note that each lambda expression has no parameters.
+            //LazyValue<int> lazyOne = new LazyValue<int>(() => ExpensiveOne());
+            //LazyValue<long> lazyTwo = new LazyValue<long>(() => ExpensiveTwo("apple"));
 
-            Console.WriteLine("LazyValue objects have been created.");
+            //Console.WriteLine("LazyValue objects have been created.");
 
-            // Get the values of the LazyValue objects.
-            Console.WriteLine(lazyOne.value);
-            Console.WriteLine(lazyTwo.value);
+            //// Get the values of the LazyValue objects.
+            //Console.WriteLine(lazyOne.value);
+            //Console.WriteLine(lazyTwo.value);
+
+
+            //Func<string, int, string> selector = (str, index) => str.ToUpper();
+
+            Func<string, int, string> selector = delegate (string str, int index) { return SelectorMethod(str, index); };
+
+            string[] months = { "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december" };
+
+            var capitalizedWords = months.Select(selector);
+
+            foreach(var month in capitalizedWords)
+            {
+                Console.WriteLine(month);
+            }
+            
             Console.ReadLine();
+        }
+
+        private static string SelectorMethod (string value, int index)
+        {
+            return value.ToUpper();
         }
 
         static int ExpensiveOne()
