@@ -119,8 +119,9 @@
     }
   ```
   
-  Remember Enumerable.Select() has second overload method : 
-    ```c#
+  ### Remember Enumerable.Select() has second overload method : 
+  
+  ```c#
         //
         // Summary:
         //     Projects each element of a sequence into a new form by incorporating the element's
