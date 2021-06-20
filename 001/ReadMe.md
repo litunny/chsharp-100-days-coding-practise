@@ -1,4 +1,4 @@
-# Day One - Microsoft C# Func<TResult> Delegate
+# Day 001 - Microsoft C# Func<TResult> Delegate
 
   ### What are Delegates?
   
