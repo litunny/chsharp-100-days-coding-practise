@@ -7,19 +7,10 @@ namespace ConsoleApp
     {
         static async Task Main(string[] args)
         {
-            //Action action = delegate () { Transfer(); };
+           
+            TransferService<UserAccount> transferService = new TransferService<UserAccount>(() => { return GetMyUserAccount(); });
 
-            //Func<string> func = delegate () {  return Withdraw(); };
-
-            //action();
-
-            //var result = func();
-
-            //TransferService<UserAccount> transferService = new TransferService<UserAccount>(delegate () { return GetUserAccount(); });
-
-            TransferService<UserAccount> transferService = new TransferService<UserAccount>(() => { return GetUserAccount(); });
-
-            await transferService.SendMoneyAsync(new UserAccount("Michel Clarke", "Sterling Bank", "038230239", 120.00), callback: async (account, response, status) => {
+            await transferService.SendMoneyAsync(GetBeneficiaryUserAccount(), callback: async (account, response, status) => {
 
                 var result = status switch
                 {
@@ -45,7 +36,12 @@ namespace ConsoleApp
             Console.ReadLine();
         }
 
-        public static UserAccount GetUserAccount ()
+        public static UserAccount GetBeneficiaryUserAccount()
+        {
+            return new UserAccount("Michel Clarke", "Sterling Bank", "038230239", 120.00);
+        }
+
+        public static UserAccount GetMyUserAccount ()
         {
             return new UserAccount("John Doe", "Sterling Bank", "003829393", 90.00);
         }
