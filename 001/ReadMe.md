@@ -122,33 +122,6 @@
   ### Remember Enumerable.Select() has second overload method : 
   
   ```c#
-        //
-        // Summary:
-        //     Projects each element of a sequence into a new form by incorporating the element's
-        //     index.
-        //
-        // Parameters:
-        //   source:
-        //     A sequence of values to invoke a transform function on.
-        //
-        //   selector:
-        //     A transform function to apply to each source element; the second parameter of
-        //     the function represents the index of the source element.
-        //
-        // Type parameters:
-        //   TSource:
-        //     The type of the elements of source.
-        //
-        //   TResult:
-        //     The type of the value returned by selector.
-        //
-        // Returns:
-        //     An System.Collections.Generic.IEnumerable`1 whose elements are the result of
-        //     invoking the transform function on each element of source.
-        //
-        // Exceptions:
-        //   T:System.ArgumentNullException:
-        //     source or selector is null.
         public static IEnumerable<TResult> Select<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector);
   ```
   
