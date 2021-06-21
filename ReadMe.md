@@ -82,7 +82,7 @@
 
   ```
   ### Let's break it down
-  ![GitHub Logo](snaphot-001.png)
+  ![GitHub Logo](001/snaphot-001.png)
  
   In other word ```c# out``` keyword already marked TResult of any type to assignable and modifiable unlike ```c# in ``` and ```c# ref ```. You can read more about the             difference in these parameter modifier here : https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-parameter-modifier.
   
