@@ -50,9 +50,9 @@
   
   ### More Examples 
   
-  Below is another example, more like a pragmatic approach where you can use Action<T> and Action<T, T> in many more. The below implementation is just an abstract or pseudocode for a Fund Transfer Service:
+  Below is another example, more like a pragmatic approach where you can use Action<T> and Action<T, T, T> in many more. The below implementation is just an abstract or pseudocode for a Fund Transfer Service:
   
-  ### Example - 02 Action<in T, in T>()
+  ### Example - 02 Action<in T, in T, in T>()
   ```c#
     using System;
     using System.Collections.Generic;
