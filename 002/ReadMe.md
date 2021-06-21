@@ -1,4 +1,4 @@
-# Day 001 - Microsoft C# Action<T> Delegate
+# Day 002 - Microsoft C# Action<T> Delegate
 
   ### Func<TResult> Delegate
   ```c#
