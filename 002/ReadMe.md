@@ -1,6 +1,6 @@
 # Day 002 - Microsoft C# Action<T> Delegate
 
-  ### Func<TResult> Delegate
+  ### Action<T> Delegate
   ```c#
   public delegate void Action<in T>(T obj);
   ```

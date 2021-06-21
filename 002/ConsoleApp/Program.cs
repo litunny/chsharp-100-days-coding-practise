@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ConsoleApp
@@ -7,17 +8,6 @@ namespace ConsoleApp
     {
         static async Task Main(string[] args)
         {
-
-            Action action = delegate () { Console.WriteLine("Method Fired!!!"); };
-
-            Action<string> action1 = delegate (string value) { Console.WriteLine(value); };
-
-            Action<string, string> action2 = (string value1, string value2) => { Console.WriteLine($"{value1} and {value2}"); };
-
-            action();
-            action1("Value One");
-            action2("Value One" , "Value Two");
-
             //Initiate Transfer Service
             TransferService<UserAccount> transferService = new TransferService<UserAccount>(() => { return GetMyUserAccount(); });
 
