@@ -4,8 +4,23 @@ namespace ConsoleApp
 {
     class Program
     {
+        public delegate void Del();
         static void Main (string[] args)
         {
+            
+
+            Del a = delegate { Console.WriteLine("This is A - Delegate"); };
+            Del b = delegate { Console.WriteLine("This is B - Delegate"); };
+            Del c = a + b;
+            Del d = c - a;
+
+            Console.WriteLine("Delegate result for c");
+            c();
+
+            Console.WriteLine("Delegate result for d");
+            d();
+
+
             MulticastDelegate.Initialize()
                .MakeAction(() => {
                    Console.WriteLine("Make Action");
