@@ -1,4 +1,4 @@
-# Day 003 - Microsoft C# Multicast Delegate
+# Day 004 - Microsoft C# Multicast Delegate
 
   ### What Multicast Delegate?
   Multicast Delegate is a delegate that can have more than one element in its invocation. This delegate specially holds reference of more than one function. When this delegate is invoked, then all the functions which are referenced by the delegate are going to be invoked. 
@@ -104,7 +104,7 @@
   ```
   The number one key factor of to ensuring ensuring object / class serialization is by marking the class with [Serializable] attribute, without this will result to compilation error.
 
-  ### Benefits
+  ### Delegate Chaining Example
   You can use Serialization as an easy means to persist your data, where you can have the current state of your an object of a class ( at that moment) being saved inside a file, and get the same value for this object of a class upon retrieval.
 
   ### Example - 001
