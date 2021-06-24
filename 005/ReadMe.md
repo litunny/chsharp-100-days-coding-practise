@@ -1,8 +1,14 @@
 # Day 005 - Microsoft C# Predicate Delegate
 
-  ### What Predicate Delegate?
+  ### What is Predicate Delegate?
   Predicate is the delegate like Func and Action delegates. It represents a method containing a set of criteria and checks whether the passed parameter meets those criteria. A predicate delegate methods must take one input parameter and return a boolean - true or false.
 
+  ### Definition
+  ```c#
+  public delegate bool Predicate<in T>(T obj)
+  ```
+  The follow code snippet shows Predicate delegate usage in action :
+  
   ### Predicate Delegate Example
   ```c#
     using System;
