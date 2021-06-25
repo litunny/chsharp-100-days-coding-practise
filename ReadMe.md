@@ -138,6 +138,7 @@
   ```
 
 
+
 # Day 002 - Microsoft C# Action<T> Delegate
 
   ### Action<T> Delegate
@@ -324,6 +325,229 @@
     }
   ```
   
+
+
+  # Day 003 - Microsoft C# Serialization
+
+  ### What is Serialization?
+  
+  Serialization is the process of converting an object into a stream of bytes to store the object or transmit it to memory, a database, or a file. Its main purpose is to save the state of an object in order to be able to recreate it when needed. The reverse process is called deserialization.
+  
+  ### Using ISerializable Interface
+  ```c#
+  public interface ISerializable
+  ```
+  This interface allows for custom serialization mechanism, where each property of a class inheriting can have their definition of storing their respective properties. One of the key remark to take note is that, any class inheriting from this ISerializable must conform to the following constructor:
+
+  ```c#
+    public ClassName (SerializationInfo info, StreamingContext context)
+  ```
+  The number one key factor of to ensuring ensuring object / class serialization is by marking the class with [Serializable] attribute, without this will result to compilation error.
+
+  ### Benefits
+  You can use Serialization as an easy means to persist your data, where you can have the current state of your an object of a class ( at that moment) being saved inside a file, and get the same value for this object of a class upon retrieval.
+
+  ### Example - 001
+ 
+  ```c#
+    using System;
+    using System.IO;
+    using System.Runtime.Serialization;
+    using System.Runtime.Serialization.Formatters.Binary;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                Student student = new Student("John", "Doe");
+
+                FileStream fileStream = new FileStream("student.data", FileMode.Create);
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(fileStream, student);
+                fileStream.Close();
+
+                FileStream readFileStream = new FileStream("student.data", FileMode.Open);
+                var readStudent = (Student)formatter.Deserialize(readFileStream);
+                readFileStream.Close();
+
+                Console.WriteLine(readStudent.GetFullName());
+
+                Console.ReadLine();
+            }
+        }
+
+        [Serializable]
+        class Student
+        {
+            private string FirstName { get; set; }
+            private string LastName { get; set; }
+            public Student(string firstName, string lastName)
+            {
+                FirstName = firstName;
+                LastName = lastName;
+            }
+
+            public string GetFirstName() => FirstName;
+            public string GetLastName() => LastName;
+            public string GetFullName() => $"{GetFirstName()} {GetLastName()}";
+        }
+    }
+  ```
+
+
+  # Day 004 - Microsoft C# Multicast Delegate
+
+  ### What Multicast Delegate?
+  Multicast Delegate is a delegate that can have more than one element in its invocation. This delegate specially holds reference of more than one function. When this delegate is invoked, then all the functions which are referenced by the delegate are going to be invoked. 
+
+  ### Multicast Delegate Example
+  ```c#
+    using System;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            public delegate void Del();
+            static void Main (string[] args)
+            {
+            
+                Del a = delegate { Console.WriteLine("This is A - Delegate"); };
+                Del b = delegate { Console.WriteLine("This is B - Delegate"); };
+                Del c = a + b;
+                Del d = c - a;
+
+                Console.WriteLine("Delegate result for c");
+                c();
+
+                Console.WriteLine("Delegate result for d");
+                d();
+            }
+        }
+    }
+  ```
+  Despite that delegate serves as a pointer, type or blueprint to methods, using multicast delegate can be subject to having arithmetic operator acting on them. Also the following example shows how you can chain delegate together for order of executions.
+
+  ### Delegate Chaining Example
+  ```c#
+    using System;
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            public delegate void Del();
+            static void Main (string[] args)
+            {
+              
+                MulticastDelegate.Initialize()
+                  .MakeAction(() => {
+                      Console.WriteLine("Make Action");
+                  })
+                  .Then(() => {
+                      Console.WriteLine("Then");
+                  })
+                  .AndThen(() => {
+                      Console.WriteLine("And Then");
+                  })
+                  .AndFinally(() =>
+                  {
+                      Console.WriteLine("And Finally");
+                  })
+                  .Then(() =>
+                  {
+                      Console.WriteLine("Another Then");
+                  })
+                  .Build();
+
+                Console.WriteLine("Hello World");
+            }
+        }
+
+        public class MulticastDelegate
+        {
+            public delegate void Del();
+            private static MulticastDelegate instance = new MulticastDelegate();
+            private Del dels;
+            private MulticastDelegate() { }
+            public static MulticastDelegate Initialize()
+            {
+                return instance;
+            }
+            public MulticastDelegate MakeAction(Del del)
+            {
+                dels += del;
+                return this;
+            }
+            public MulticastDelegate AndThen(Del del)
+            {
+                dels += del;
+                return this;
+            }
+            public MulticastDelegate AndFinally (Del del)
+            {
+                dels += del;
+                return this;
+            }
+            public MulticastDelegate Then(Del del)
+            {
+                dels += del;
+                return this;
+            }
+            public void Build()
+            {
+                dels();
+            }
+        }
+    }
+  ```
+    
+
+
+    # Day 005 - Microsoft C# Predicate Delegate
+
+  ### What is Predicate Delegate?
+  Predicate is the delegate like Func and Action delegates. It represents a method containing a set of criteria and checks whether the passed parameter meets those criteria. A predicate delegate methods must take one input parameter and return a boolean - true or false.
+
+  ### Definition
+  ```c#
+  public delegate bool Predicate<in T>(T obj)
+  ```
+  The follow code snippet shows Predicate delegate usage in action :
+  
+  ### Predicate Delegate Example
+  ```c#
+    using System;
+    using System.Linq;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                Predicate<string> predicate = delegate (string value) { return value.Contains("Emmanuel"); };
+
+                Predicate<string> predicate1 = (string value) => value.Contains("Joshua");
+
+                Console.WriteLine(predicate("Osinnowo Itunu"));
+
+                var result = Array.Find<string>(new string[] { "Joshua", "Temi", "Emmanuel4" }, s => s.Contains("Emmanuel"));
+
+                Console.WriteLine(result);
+
+                Console.ReadLine();
+            }
+        }
+    }
+  ```
+
+  
   ### References
   * https://docs.microsoft.com/en-us/dotnet/api/system.func-1?view=net-5.0
   * https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-parameter-modifier
+  * https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/serialization/
+  * https://docs.microsoft.com/en-us/dotnet/api/system.runtime.serialization.iserializable?view=net-5.0
+  * https://docs.microsoft.com/en-us/dotnet/api/system.multicastdelegate?view=net-5.0
+  * https://docs.microsoft.com/en-us/dotnet/api/system.predicate-1?view=net-5.0
