@@ -1,6 +1,6 @@
 # Day 007 - Microsoft C# Tuple<T> 
 
-  ### What is C# Tupe<T>?
+  ### What is C# Tuple<T>?
   A tuple is a data structure that has a specific number and sequence of elements. The .NET Framework directly supports tuples with one to seven elements. In addition, you can create tuples of eight or more elements by nesting tuple objects in the Rest property of a
 
   ### Tuple<T, T, T> Example
