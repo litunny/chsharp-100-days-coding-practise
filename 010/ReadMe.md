@@ -1,9 +1,9 @@
-# Day 007 - Microsoft C# IObservable 
+# Day 010 - Microsoft C# IObservable 
 
   ### What is C# IObservable?
   IObservable has a Subscribe method that must be implemented. It represents the registration of observers and returns an IDisposable object. As it returns an IDisposable it will be easier for us to release an observer from the subject properly. 
 
-  ### Tuple<T, T, T> Example
+  ### Example
   ```c#
     using System;
     using System.Collections.Generic;
