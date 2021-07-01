@@ -21,6 +21,7 @@
                 } else
                 {
                     Console.WriteLine("Invalid age");
+                }
                 
                 var isWeekend = IsWeekWeekend(Day.SATURDAY);
 
