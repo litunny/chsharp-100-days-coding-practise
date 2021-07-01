@@ -3,7 +3,7 @@
   ### What is C# Pattern Matching?
   Pattern matching is a technique where you test an expression to determine if it has certain characteristics. C# pattern matching provides more concise syntax for testing expressions and taking action when an expression matches.
 
-  ### Example
+  ### Example - Introducing Pattern Matching
   ```c#
     using System;
 
@@ -21,7 +21,6 @@
                 } else
                 {
                     Console.WriteLine("Invalid age");
-                }
                 
                 var isWeekend = IsWeekWeekend(Day.SATURDAY);
 
