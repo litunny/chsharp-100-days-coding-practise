@@ -1,0 +1,16 @@
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\bin\Debug\net5.0\ConsoleApp.exe
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\bin\Debug\net5.0\ConsoleApp.deps.json
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\bin\Debug\net5.0\ConsoleApp.runtimeconfig.json
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\bin\Debug\net5.0\ConsoleApp.runtimeconfig.dev.json
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\bin\Debug\net5.0\ConsoleApp.dll
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\bin\Debug\net5.0\ref\ConsoleApp.dll
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\bin\Debug\net5.0\ConsoleApp.pdb
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\obj\Debug\net5.0\ConsoleApp.csprojAssemblyReference.cache
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\obj\Debug\net5.0\ConsoleApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\obj\Debug\net5.0\ConsoleApp.AssemblyInfoInputs.cache
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\obj\Debug\net5.0\ConsoleApp.AssemblyInfo.cs
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\obj\Debug\net5.0\ConsoleApp.csproj.CoreCompileInputs.cache
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\obj\Debug\net5.0\ConsoleApp.dll
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\obj\Debug\net5.0\ref\ConsoleApp.dll
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\obj\Debug\net5.0\ConsoleApp.pdb
+C:\Users\Test\Documents\CodeProjects\100DaysCodingPractise\csharp\012\ConsoleApp\obj\Debug\net5.0\ConsoleApp.genruntimeconfig.cache

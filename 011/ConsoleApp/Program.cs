@@ -16,7 +16,6 @@ namespace ConsoleApp
 
             Console.WriteLine($"Name : {person.name} | Age : {person.age}");
 
-
             //Using Tuple Fields
             var name = (FirstName: "Emmanuel", LastName: "Osinnowo");
 
