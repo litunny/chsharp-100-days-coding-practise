@@ -15,6 +15,7 @@ namespace ConsoleApp
             {
                 Console.WriteLine("Invalid age");
             }
+
             var isWeekend = IsWeekWeekend(Day.SATURDAY);
 
             Console.WriteLine($"IsWeekend : {isWeekend}");
