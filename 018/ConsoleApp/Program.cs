@@ -9,15 +9,13 @@ namespace ConsoleApp
         {
             List<Person> persons = new();
 
-            Person person = new("Emmanuel", "Osinnowo");
+            Person person = new("Kelvin", "Hart");
 
             Console.WriteLine(person.FirstName);
 
             Person person2 = person with { FirstName = "Michael" };
 
             Console.WriteLine(person2.FirstName);
-
-            Console.WriteLine("Hello World!");
         }
     }
 
