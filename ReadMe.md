@@ -755,7 +755,7 @@
 
 
 
-# Day 010 - Microsoft C# IObservable 
+  # Day 010 - Microsoft C# IObservable 
 
   ### What is C# IObservable?
   IObservable has a Subscribe method that must be implemented. It represents the registration of observers and returns an IDisposable object. As it returns an IDisposable it will be easier for us to release an observer from the subject properly. 
@@ -886,7 +886,297 @@
 
 
 
+  # Day 011 - Microsoft C# Tuple Types 
 
+  ### What is C# Tuple Types?
+  The tuples feature provides concise syntax to group multiple data elements in a lightweight data structure, to define a tuple type, you specify types of all its data members and, optionally, the field names. You cannot define methods in a tuple type, but you can use the methods provided by .NET
+
+  ### Example
+  ```c#
+    using System;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                //Without variable
+                (double, int) values = (10.0, 10);
+
+                Console.WriteLine($"Item One : {values.Item1} | Item Two : {values.Item2}");
+
+                //With variable
+                (string name, int age) person = ("Emmanuel", 90);
+
+                Console.WriteLine($"Name : {person.name} | Age : {person.age}");
+
+                //Using Tuple Fields
+                var name = (FirstName: "Emmanuel", LastName: "Osinnowo");
+
+                Console.WriteLine($"First Name : {name.FirstName} | Last Name : {name.LastName}");
+            }
+        }
+    }
+  ```
+
+
+
+  # Day 012 - Microsoft C# Pattern Matching
+
+  ### What is C# Pattern Matching?
+  Pattern matching is a technique where you test an expression to determine if it has certain characteristics. C# pattern matching provides more concise syntax for testing expressions and taking action when an expression matches.
+
+  ### Example - Introducing Pattern Matching
+  ```c#
+    using System;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                int? age = 99;
+
+                if(age is int realAge)
+                {
+                    Console.WriteLine($"The age ain't null, Age is {age}");
+                } else
+                {
+                    Console.WriteLine("Invalid age");
+                }
+                
+                var isWeekend = IsWeekWeekend(Day.SATURDAY);
+
+                Console.WriteLine($"IsWeekend : {isWeekend}");
+
+                try
+                {
+                    var isAdult = IsAdult(0);
+
+                    Console.WriteLine($"isAdult : {isAdult}");
+
+                } catch(Exception e){
+
+                    Console.WriteLine($"Exception : {e.Message}");
+                }
+
+                Console.WriteLine("Hello World");
+            }
+
+            static bool IsWeekWeekend(Day day) => day switch
+            {
+                Day.FRIDAY => true,
+                Day.SATURDAY => true,
+                Day.SUNDAY => true,
+                _ => false
+            };
+
+            static bool IsAdult(int age) => age switch
+            {
+                < 1 => throw new ArgumentOutOfRangeException(nameof(age), $"What the hell are you trying to do now?"),
+                < 18 => false,
+                18 => true,
+                > 100 => throw new ArgumentOutOfRangeException(nameof(age), $"You ain't normal!!!"),
+                _ => throw new ArgumentOutOfRangeException(nameof(age), $"I give up"),
+            };
+
+            static string GetCalendarSeason(DateTime date) => date.Month switch
+            {
+                >= 3 and < 6 => "spring",
+                >= 6 and < 9 => "summer",
+                >= 9 and < 12 => "autumn",
+                12 or (>= 1 and < 3) => "winter",
+                _ => throw new ArgumentOutOfRangeException(nameof(date), $"Date with unexpected month: {date.Month}."),
+            };
+        }
+
+        public enum Day
+        {
+            MONDAY = 1,
+            TUESDAY,
+            WEDNESDAY,
+            THURSDAY,
+            FRIDAY,
+            SATURDAY,
+            SUNDAY
+        }
+    }
+  ```
+
+
+
+  # Day 013 - Microsoft C# Range
+
+  ### What is C# Range?
+  Pattern matching is a technique where you test an expression to determine if it has certain characteristics. C# pattern matching provides more concise syntax for testing expressions and taking action when an expression matches.
+
+  ### Range
+  ```c#
+  public struct Range : IEquatable<Range>
+  ```
+
+  ### Example - Introducing Pattern Matching
+  ```c#
+   using System;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                int[] someArray = new int[5] { 1, 2, 3, 4, 5 };
+                            
+                
+                int[] subArray1 = someArray[0..2];
+
+                foreach (var num in subArray1)
+                {
+                    Console.WriteLine($"SubArray1 Num : {num}");
+                }
+
+                int[] subArray2 = someArray[1..^0];
+
+                foreach (var num in subArray2)
+                {
+                    Console.WriteLine($"SubArray2 Num : {num}");
+                }
+            }
+        }
+    }
+
+  ```
+
+
+
+
+# Day 014 - Microsoft C# Task.WhenAny()
+
+  ### What is C# Task.WhenAny()?
+  Creates a task that will complete when any of the supplied tasks have completed. The returned task will complete when any of the supplied tasks has completed. The returned task will always end in the RanToCompletion state with its Result set to the first task to complete. This is true even if the first task to complete ended in the Canceled or Faulted state.
+
+  ### Range
+  ```c#
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            static async Task Main(string[] args)
+            {
+                Coffee cup = PourCoffee();
+                Console.WriteLine("coffee is ready");
+
+                var eggsTask = FryEggsAsync(2);
+                var baconTask = FryBaconAsync(3);
+                var toastTask = MakeToastWithButterAndJamAsync(2);
+
+                var breakfastTasks = new List<Task> { eggsTask, baconTask, toastTask };
+                while (breakfastTasks.Count > 0)
+                {
+                    Task finishedTask = await Task.WhenAny(breakfastTasks);
+
+                    if (finishedTask == eggsTask)
+                    {
+                        Console.WriteLine("eggs are ready");
+                    }
+                    else if (finishedTask == baconTask)
+                    {
+                        Console.WriteLine("bacon is ready");
+                    }
+                    else if (finishedTask == toastTask)
+                    {
+                        Console.WriteLine("toast is ready");
+                    }
+                    breakfastTasks.Remove(finishedTask);
+                }
+
+                Juice oj = PourOJ();
+                Console.WriteLine("oj is ready");
+                Console.WriteLine("Breakfast is ready!");
+            }
+
+            static async Task<Toast> MakeToastWithButterAndJamAsync(int number)
+            {
+                var toast = await ToastBreadAsync(number);
+                ApplyButter(toast);
+                ApplyJam(toast);
+
+                return toast;
+            }
+
+            private static Juice PourOJ()
+            {
+                Console.WriteLine("Pouring orange juice");
+                return new Juice();
+            }
+
+            private static void ApplyJam(Toast toast) =>
+                Console.WriteLine("Putting jam on the toast");
+
+            private static void ApplyButter(Toast toast) =>
+                Console.WriteLine("Putting butter on the toast");
+
+            private static async Task<Toast> ToastBreadAsync(int slices)
+            {
+                for (int slice = 0; slice < slices; slice++)
+                {
+                    Console.WriteLine("Putting a slice of bread in the toaster");
+                }
+                Console.WriteLine("Start toasting...");
+                await Task.Delay(3000);
+                Console.WriteLine("Remove toast from toaster");
+
+                return new Toast();
+            }
+
+            private static async Task<Bacon> FryBaconAsync(int slices)
+            {
+                Console.WriteLine($"putting {slices} slices of bacon in the pan");
+                Console.WriteLine("cooking first side of bacon...");
+                await Task.Delay(3000);
+                for (int slice = 0; slice < slices; slice++)
+                {
+                    Console.WriteLine("flipping a slice of bacon");
+                }
+                Console.WriteLine("cooking the second side of bacon...");
+                await Task.Delay(3000);
+                Console.WriteLine("Put bacon on plate");
+
+                return new Bacon();
+            }
+
+            private static async Task<Egg> FryEggsAsync(int howMany)
+            {
+                Console.WriteLine("Warming the egg pan...");
+                await Task.Delay(3000);
+                Console.WriteLine($"cracking {howMany} eggs");
+                Console.WriteLine("cooking the eggs ...");
+                await Task.Delay(3000);
+                Console.WriteLine("Put eggs on plate");
+
+                return new Egg();
+            }
+
+            private static Coffee PourCoffee()
+            {
+                Console.WriteLine("Pouring coffee");
+                return new Coffee();
+            }
+        }
+
+        class Coffee { }
+        class Toast { }
+        class Juice { }
+        class Bacon { }
+        class Egg { }
+    }
+  ```
   ### References
   * https://docs.microsoft.com/en-us/dotnet/api/system.func-1?view=net-5.0
   * https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-parameter-modifier
@@ -900,3 +1190,6 @@
   * https://docs.microsoft.com/en-us/dotnet/api/system.lazy-1?view=net-5.0
   * https://docs.microsoft.com/en-us/dotnet/api/system.tuple?view=net-5.0
   * https://dotnetcodr.com/2013/08/01/design-patterns-and-practices-in-net-the-observer-pattern
+  * https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-tuples
+  * https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/patterns#discard-pattern
+  * https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.whenany?view=net-5.0
