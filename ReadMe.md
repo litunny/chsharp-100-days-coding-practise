@@ -544,6 +544,184 @@
   ```
 
 
+
+  # Day 005 - Microsoft C# ConcurrentBag 
+
+  ### What is C# ConcurrentBag ?
+  The ConcurrentBag is one of the thread safe collections that was introduced in .NET 4.0. This collection allows us to store objects in an unordered manner and allows for duplicates. It is useful in a scenario where we do not need to worry about the order in which we would retrieve the objects from the collection. To investigate basic features of the ConcurrentBag and how to add and remove items, please refer to the MSDN documentation.
+  
+  ### Definition
+  ```c#
+  ConcurrentBag<T> Class
+  ```
+  The follow code snippet shows ConcurrentBag in action :
+  
+  ### Predicate Delegate Example
+  ```c#
+    using System;
+    using System.Collections.Concurrent;
+    using System.Threading.Tasks;
+    namespace ConcurrentBag
+    {
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                ConcurrentBag<int> bag = new ConcurrentBag<int>();
+                for (int i = 1; i <= 50; ++i)
+                {
+                    bag.Add(i);
+                }
+                var task1 = Task.Factory.StartNew(() => {
+                    while (bag.IsEmpty == false)
+                    {
+                        int item;
+                        if (bag.TryTake(out item))
+                        {
+                            Console.WriteLine($"{item} was picked by {Task.CurrentId}");
+                        }
+                    }
+                });
+                var task2 = Task.Factory.StartNew(() => {
+                    while (bag.IsEmpty == false)
+                    {
+                        int item;
+                        if (bag.TryTake(out item))
+                        {
+                            Console.WriteLine($"{item} was picked by {Task.CurrentId}");
+                        }
+                    }
+                });
+                Task.WaitAll(task1, task2);
+                Console.WriteLine("DONE");
+            }
+
+        } 
+    }
+  ```
+
+
+  # Day 007 - Microsoft C# BlockingCollection<T> 
+
+  ### What is C# BlockingCollection ?
+  A generic collection that supports bounding and blocking. Bounding means you can set the maximum capacity of the collection. Bounding is important in certain scenarios because it enables you to control the maximum size of the collection in memory, and it prevents the producing threads from moving too far ahead of the consuming threads.
+  
+  The following example shows a simple BlockingCollection with a bounded capacity of 100. A producer task adds items to the collection as long as some external condition is true, and then calls CompleteAdding. The consumer task takes items until the IsCompleted property is true.
+  
+  ### BlockingCollection<T> Example
+  ```c#
+    using System;
+    using System.Collections.Concurrent;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            private static bool moreItemsToAdd = true;
+            static void Main(string[] args)
+            {
+                // A bounded collection. It can hold no more
+                // than 100 items at once.
+                BlockingCollection<Data> dataItems = new BlockingCollection<Data>(100);
+                
+                // A simple blocking consumer with no cancellation.
+                Task.Run(() =>
+                    {
+                        while (!dataItems.IsCompleted)
+                        {
+
+                            Data data = null;
+                            // Blocks if dataItems.Count == 0.
+                            // IOE means that Take() was called on a completed collection.
+                            // Some other thread can call CompleteAdding after we pass the
+                            // IsCompleted check but before we call Take.
+                            // In this example, we can simply catch the exception since the
+                            // loop will break on the next iteration.
+                            try
+                            {
+                                data = dataItems.Take();
+                            }
+                            catch (InvalidOperationException) { }
+
+                            if (data != null)
+                            {
+                                Process(data);
+                            }
+                        }
+                        Console.WriteLine("\r\nNo more items to take.");
+                    });
+
+                    // A simple blocking producer with no cancellation.
+                    Task.Run(() =>
+                    {
+                        while (moreItemsToAdd)
+                        {
+                            Data data = GetData();
+                            // Blocks if numbers.Count == dataItems.BoundedCapacity
+                            dataItems.Add(data);
+                        }
+                        // Let consumer know we are done.
+                        dataItems.CompleteAdding();
+                    });
+                }
+
+            public static Data GetData() => new Data("Sample");
+
+            public static void Process (Data data)
+            {
+                Console.WriteLine($"Processing....{data.Property}");
+            }
+        }
+
+        public class Data
+        {
+            public Data(string property)
+            {
+                Property = property;
+            }
+            public string Property { get; set; }
+        }
+    }
+
+  ``
+
+  
+
+  # Day 008 - Microsoft C# Lazy<T> 
+
+  ### What is C# Lazy<T> ?
+  Lazy initialization is a technique that defers the creation of an object until the first time it is needed. In other words, initialization of the object happens only on demand.
+  
+  Lazy<T> can improve the application’s performance by avoiding unnecessary computation and memory consumption.
+
+  ### Lazy<T> Example
+
+  ```c#
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                Lazy<IEnumerable<string>> listOfNames = new Lazy<IEnumerable<string>>(() => new List<string> { "Michael", "Miracle", "Mika", "Mendes"}) ;
+
+                foreach(var name in listOfNames.Value)
+                {
+                    Console.WriteLine($"The name: {name}");
+                }
+
+                Console.WriteLine("Hello World");
+            }
+        }
+    }
+
+  ```
+
   ### References
   * https://docs.microsoft.com/en-us/dotnet/api/system.func-1?view=net-5.0
   * https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-parameter-modifier
@@ -551,3 +729,7 @@
   * https://docs.microsoft.com/en-us/dotnet/api/system.runtime.serialization.iserializable?view=net-5.0
   * https://docs.microsoft.com/en-us/dotnet/api/system.multicastdelegate?view=net-5.0
   * https://docs.microsoft.com/en-us/dotnet/api/system.predicate-1?view=net-5.0
+  * https://docs.microsoft.com/en-us/dotnet/api/system.predicate-1?view=net-5.0
+  * https://docs.microsoft.com/en-us/dotnet/standard/collections/thread-safe/blockingcollection-overview
+  * https://www.infoworld.com/article/3227207/how-to-perform-lazy-initialization-in-c.html
+  * https://docs.microsoft.com/en-us/dotnet/api/system.lazy-1?view=net-5.0
