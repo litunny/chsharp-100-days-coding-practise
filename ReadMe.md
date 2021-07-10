@@ -545,7 +545,7 @@
 
 
 
-  # Day 005 - Microsoft C# ConcurrentBag 
+  # Day 006 - Microsoft C# ConcurrentBag 
 
   ### What is C# ConcurrentBag ?
   The ConcurrentBag is one of the thread safe collections that was introduced in .NET 4.0. This collection allows us to store objects in an unordered manner and allows for duplicates. It is useful in a scenario where we do not need to worry about the order in which we would retrieve the objects from the collection. To investigate basic features of the ConcurrentBag and how to add and remove items, please refer to the MSDN documentation.
@@ -683,13 +683,12 @@
             public string Property { get; set; }
         }
     }
+  ```
 
-  ``
 
-  
 
   # Day 008 - Microsoft C# Lazy<T> 
-
+  
   ### What is C# Lazy<T> ?
   Lazy initialization is a technique that defers the creation of an object until the first time it is needed. In other words, initialization of the object happens only on demand.
   
@@ -722,6 +721,172 @@
 
   ```
 
+
+
+  # Day 009 - Microsoft C# Tuple 
+
+  ### What is C# Tuple?
+  A tuple is a data structure that has a specific number and sequence of elements. The .NET Framework directly supports tuples with one to seven elements. In addition, you can create tuples of eight or more elements by nesting tuple objects in the Rest property of a Tuple<T1,T2,T3,T4,T5,T6,T7,TRest> object.
+
+  ### Tuple<T, T, T> Example
+  ```c#
+    using System;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                var values = Tuple.Create("Fance", "Nigeria", 1890, "Maxwell");
+
+                Console.WriteLine(values.Item1);
+
+                (var firstName, var lastName, var age) = new Tuple<string, string, int>("John", "Mendes", 99);
+
+                Console.WriteLine($"First Name : {firstName} | Last Name : {lastName} | Age : {age}");
+
+                Console.ReadLine();
+            }
+        }
+    }
+
+  ```
+
+
+
+# Day 010 - Microsoft C# IObservable 
+
+  ### What is C# IObservable?
+  IObservable has a Subscribe method that must be implemented. It represents the registration of observers and returns an IDisposable object. As it returns an IDisposable it will be easier for us to release an observer from the subject properly. 
+
+  ### Example
+  ```c#
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                var provider = new StockTrader();
+                var i1 = new Investor();
+                i1.Subscribe(provider);
+                var i2 = new Investor();
+                i2.Subscribe(provider);
+
+                provider.Trade(new Stock());
+                provider.Trade(new Stock());
+                provider.Trade(null);
+                provider.End();
+            }
+        }
+
+        public class Stock
+        {
+            private string Symbol { get; set; }
+            private decimal Price { get; set; }
+        }
+
+        public class Investor : IObserver<Stock>
+        {
+            public IDisposable unsubscriber;
+            public virtual void Subscribe(IObservable<Stock> provider)
+            {
+                if (provider != null)
+                {
+                    unsubscriber = provider.Subscribe(this);
+                }
+            }
+            public virtual void OnCompleted()
+            {
+                unsubscriber.Dispose();
+            }
+            public virtual void OnError(Exception e)
+            {
+            }
+            public virtual void OnNext(Stock stock)
+            {
+            }
+        }
+
+        public class StockTrader : IObservable<Stock>
+        {
+            public StockTrader()
+            {
+                observers = new List<IObserver<Stock>>();
+            }
+            private IList<IObserver<Stock>> observers;
+            public IDisposable Subscribe(IObserver<Stock> observer)
+            {
+                if (!observers.Contains(observer))
+                {
+                    observers.Add(observer);
+                }
+                return new Unsubscriber(observers, observer);
+            }
+            public class Unsubscriber : IDisposable
+            {
+                private IList<IObserver<Stock>> _observers;
+                private IObserver<Stock> _observer;
+
+                public Unsubscriber(IList<IObserver<Stock>> observers, IObserver<Stock> observer)
+                {
+                    _observers = observers;
+                    _observer = observer;
+                }
+
+                public void Dispose()
+                {
+                    Dispose(true);
+                }
+                private bool _disposed = false;
+                protected virtual void Dispose(bool disposing)
+                {
+                    if (_disposed)
+                    {
+                        return;
+                    }
+                    if (disposing)
+                    {
+                        if (_observer != null && _observers.Contains(_observer))
+                        {
+                            _observers.Remove(_observer);
+                        }
+                    }
+                    _disposed = true;
+                }
+            }
+            public void Trade(Stock stock)
+            {
+                foreach (var observer in observers)
+                {
+                    if (stock == null)
+                    {
+                        observer.OnError(new ArgumentNullException());
+                    }
+                    observer.OnNext(stock);
+                }
+            }
+            public void End()
+            {
+                foreach (var observer in observers.ToArray())
+                {
+                    observer.OnCompleted();
+                }
+                observers.Clear();
+            }
+        }
+    }
+
+  ```
+
+
+
+
   ### References
   * https://docs.microsoft.com/en-us/dotnet/api/system.func-1?view=net-5.0
   * https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-parameter-modifier
@@ -733,3 +898,5 @@
   * https://docs.microsoft.com/en-us/dotnet/standard/collections/thread-safe/blockingcollection-overview
   * https://www.infoworld.com/article/3227207/how-to-perform-lazy-initialization-in-c.html
   * https://docs.microsoft.com/en-us/dotnet/api/system.lazy-1?view=net-5.0
+  * https://docs.microsoft.com/en-us/dotnet/api/system.tuple?view=net-5.0
+  * https://dotnetcodr.com/2013/08/01/design-patterns-and-practices-in-net-the-observer-pattern
