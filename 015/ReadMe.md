@@ -1,6 +1,6 @@
-# Day 015 - Microsoft C# Task.All(IEnumerable<Task>)
+# Day 015 - Microsoft C# Task.WhenAll(IEnumerable<Task>)
 
-  ### What is C# Task.WhenAll<>?
+  ### What is C# Task.WhenAll(IEnumerable<Task>)?
   WhenAll(IEnumerable<Task>) Creates a task that will complete when all of the Task objects in an enumerable collection have completed. WhenAll(Task[]) Creates a task that will complete when all of the Task objects in an array have completed.
 
   ### Range

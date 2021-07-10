@@ -1,4 +1,4 @@
-# Day 019 - Microsoft C# WeakReference
+  # Day 019 - Microsoft C# WeakReference
 
   ### What is C# WeakReference ?
   A weak reference is a reference, that allows the GC to collect the object while still allowing to access the object. A weak reference is valid only during the indeterminate amount of time until the object is collected when no strong references exist. When you use a weak reference, the application can still obtain a strong reference to the object, which prevents it from being collected. So weak references can be useful for holding on to large objects that are expensive to initialize, but should be available for garbage collection if they are not actively in use.
@@ -32,7 +32,6 @@
             }
         }
     }
-
   ```
   ### References
   * https://docs.microsoft.com/en-us/dotnet/api/system.weakreference?view=net-5.0

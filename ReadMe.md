@@ -1177,6 +1177,367 @@
         class Egg { }
     }
   ```
+
+
+
+
+  # Day 015 - Microsoft C# Task.WhenAll(IEnumerable<Task>)
+
+  ### What is C# Task.WhenAll(IEnumerable<Task>)?
+  WhenAll(IEnumerable<Task>) Creates a task that will complete when all of the Task objects in an enumerable collection have completed. WhenAll(Task[]) Creates a task that will complete when all of the Task objects in an array have completed.
+
+  ### Range
+  ```c#
+    using System;
+    using System.Collections.Generic;
+    using System.Net.NetworkInformation;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApp
+    {
+        public class Program
+        {
+            public static async Task Main()
+            {
+                int failed = 0;
+                var tasks = new List<Task>();
+                String[] urls = { "www.adatum.com", "www.cohovineyard.com",
+                            "www.cohowinery.com", "www.northwindtraders.com",
+                            "www.contoso.com" };
+
+                foreach (var value in urls)
+                {
+                    var url = value;
+                    tasks.Add(Task.Run(() => {
+                        var png = new Ping();
+                        try
+                        {
+                            var reply = png.Send(url);
+                            if (!(reply.Status == IPStatus.Success))
+                            {
+                                Interlocked.Increment(ref failed);
+                                throw new TimeoutException("Unable to reach " + url + ".");
+                            }
+                        }
+                        catch (PingException)
+                        {
+                            Interlocked.Increment(ref failed);
+                            throw;
+                        }
+                    }));
+                }
+                Task t = Task.WhenAll(tasks.ToArray());
+                try
+                {
+                    await t;
+                }
+                catch { }
+
+                if (t.Status == TaskStatus.RanToCompletion)
+                    Console.WriteLine("All ping attempts succeeded.");
+                else if (t.Status == TaskStatus.Faulted)
+                    Console.WriteLine("{0} ping attempts failed", failed);
+            }
+        }
+    }
+  ```
+ 
+
+
+
+
+  # Day 016 - Microsoft C# Cancellation Token
+
+  ### What is C# Cancellation Token?
+  A CancellationToken enables cooperative cancellation between threads, thread pool work items, or Task objects. You create a cancellation token by instantiating a CancellationTokenSource object, which manages cancellation tokens retrieved from its CancellationTokenSource.Token property. You then pass the cancellation token to any number of threads, tasks, or operations that should receive notice of cancellation. The token cannot be used to initiate cancellation. When the owning object calls CancellationTokenSource.Cancel, the IsCancellationRequested property on every copy of the cancellation token is set to true. The objects that receive the notification can respond in whatever manner is appropriate.
+
+  ### Declaration
+  ```
+    public struct CancellationToken
+  ```
+
+  ### Example
+  ```c#
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            static async Task Main()
+            {
+                var tokenSource2 = new CancellationTokenSource();
+                CancellationToken ct = tokenSource2.Token;
+
+                var task = Task.Run(() =>
+                {
+                    // Were we already canceled?
+                    ct.ThrowIfCancellationRequested();
+
+                    bool moreToDo = true;
+
+                    while (moreToDo)
+                    {
+                        // Poll on this property if you have to do
+                        // other cleanup before throwing.
+                        if (ct.IsCancellationRequested)
+                        {
+                            // Clean up here, then...
+                            ct.ThrowIfCancellationRequested();
+                        }
+                    }
+
+                }, tokenSource2.Token); // Pass same token to Task.Run.
+
+                tokenSource2.Cancel();
+
+                // Just continue on this thread, or await with try-catch:
+                try
+                {
+                    await task;
+                }
+                catch (OperationCanceledException e)
+                {
+                    Console.WriteLine($"{nameof(OperationCanceledException)} thrown with message: {e.Message}");
+                }
+                finally
+                {
+                    tokenSource2.Dispose();
+                }
+
+                Console.ReadKey();
+            }
+        }
+    }
+  ```
+
+
+
+
+  # Day 017 - Microsoft C# File.Create() 
+
+  ### What is C# File.Create() ?
+  The Create() method of the File class is used to create files in C#. The File. Create() method takes a fully specified path as a parameter and creates a file at the specified location; if any such file already exists at the given location, it is overwritten.
+
+  ### Declaration
+  ```
+    public static System.IO.FileStream Create (string path);
+  ```
+
+  ### Example
+  ```c#
+    using System;
+    using System.IO;
+    using System.Text;
+
+    namespace ConsoleApp {
+        class Program
+        {
+            public static void Main()
+            {
+                string path = @"c:\temp\MyTest.txt";
+
+                try
+                {
+                    // Create the file, or overwrite if the file exists.
+                    using (FileStream fs = File.Create(path))
+                    {
+                        byte[] info = new UTF8Encoding(true).GetBytes("This is some text in the file.");
+                        // Add some information to the file.
+                        fs.Write(info, 0, info.Length);
+                    }
+
+                    // Open the stream and read it back.
+                    using (StreamReader sr = File.OpenText(path))
+                    {
+                        string s = "";
+                        while ((s = sr.ReadLine()) != null)
+                        {
+                            Console.WriteLine(s);
+                        }
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+        }
+    }
+  ```
+
+
+
+
+  # Day 018 - Microsoft C# 9.0 Record Types  
+
+  ### What is C# 9.0 Record Types ?
+  C# 9.0 introduces record types. You use the record keyword to define a reference type that provides built-in functionality for encapsulating data. You can create record types with immutable properties by using positional parameters or standard property syntax:
+ 
+  ### Example
+  ```c#
+    using System;
+    using System.Collections.Generic;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                List<Person> persons = new();
+
+                Person person = new("Kelvin", "Hart");
+
+                Console.WriteLine(person.FirstName);
+
+                Person person2 = person with { FirstName = "Michael" };
+
+                Console.WriteLine(person2.FirstName);
+            }
+        }
+
+        public record Person(string FirstName, string LastName);
+    }
+  ```
+
+
+
+ 
+  # Day 019 - Microsoft C# WeakReference
+
+  ### What is C# WeakReference ?
+  A weak reference is a reference, that allows the GC to collect the object while still allowing to access the object. A weak reference is valid only during the indeterminate amount of time until the object is collected when no strong references exist. When you use a weak reference, the application can still obtain a strong reference to the object, which prevents it from being collected. So weak references can be useful for holding on to large objects that are expensive to initialize, but should be available for garbage collection if they are not actively in use.
+ 
+  ### Declaration
+  ```c#
+    public class WeakReference : System.Runtime.Serialization.ISerializable
+  ```
+  ### Example
+  ```c#
+    using System;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                WeakReference reference = new WeakReference(new object(), false);
+
+                GC.Collect();
+
+                object target = reference.Target;
+                if (target != null)
+                    DoSomething(target);
+            }
+
+            private static void DoSomething(object obj)
+            {
+                Console.WriteLine(obj.ToString());
+            }
+        }
+    }
+  ```
+
+
+
+
+  # Day 020 - Microsoft C# Yield
+
+  ### What is C# Yield?
+  When you use the yield contextual keyword in a statement, you indicate that the method, operator, or get accessor in which it appears is an iterator. Using yield to define an iterator removes the need for an explicit extra class (the class that holds the state for an enumeration, see IEnumerator<T> for an example) when you implement the IEnumerable and IEnumerator pattern for a custom collection type.
+
+  ### Declaration
+  ```c#
+    yield return <expression>;
+    yield break;
+  ```
+  ### Example
+  ```c#
+    using System;
+    using System.Collections.Generic;
+
+    namespace ConsoleApp
+    {
+        class Program
+        {
+            static List<Employee> Employees = new List<Employee>()
+            {
+                new Employee { Name = "Joshua Clarke", Salary = 19000 },
+                new Employee { Name = "Melvin Gayrio", Salary = 18500 },
+                new Employee { Name = "Trevor Kelvin", Salary = 12500 },
+                new Employee { Name = "Whalte Bryian", Salary = 22500 },
+                new Employee { Name = "Elddie Montei", Salary = 28500 },
+                new Employee { Name = "Chucks Vinnie", Salary = 13500 }
+            };
+
+            static void Main(string[] args)
+            {
+                Console.WriteLine("========= With Yield ========");
+
+                foreach(var item in FindWithYield())
+                {
+                    Console.WriteLine($"Name : {item.Name} | Salary : {item.Salary}");
+                }
+
+                Console.WriteLine("========= With Yield ========");
+
+                Console.WriteLine("");
+
+                Console.WriteLine("========= Without Yield ========");
+                
+                foreach (var item in FindWithoutYield())
+                {
+                    Console.WriteLine($"Name : {item.Name} | Salary : {item.Salary}");
+                }
+
+                Console.WriteLine("========= Without Yield ========");
+            }
+
+            static IEnumerable<Employee> FindWithYield ()
+            {
+                foreach(var employee in Employees)
+                {
+                    if(employee.Salary > 20000)
+                    {
+                        yield return employee;
+                    }
+                }
+            }
+
+            static IEnumerable<Employee> FindWithoutYield()
+            {
+                List<Employee> emps = new List<Employee>();
+
+                foreach (var employee in Employees)
+                {
+                    if (employee.Salary > 20000)
+                    {
+                        emps.Add(employee);
+                    }
+                }
+
+                return emps;
+            }
+        }
+
+        class Employee
+        {
+            public string Name { get; set; }
+            public int Salary { get; set; }
+        }
+    }
+  ```
+
+
+
+  
+  
   ### References
   * https://docs.microsoft.com/en-us/dotnet/api/system.func-1?view=net-5.0
   * https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-parameter-modifier
@@ -1193,3 +1554,9 @@
   * https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-tuples
   * https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/patterns#discard-pattern
   * https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.whenany?view=net-5.0
+  * https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.whenall?view=net-5.0
+  * https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/task-cancellation
+  * https://docs.microsoft.com/en-us/dotnet/api/system.io.file.create?view=net-5.0
+  * https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-9#record-types
+  * https://docs.microsoft.com/en-us/dotnet/api/system.weakreference?view=net-5.0
+  * https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/yield
