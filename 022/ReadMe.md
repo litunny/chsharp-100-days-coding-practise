@@ -1,4 +1,4 @@
-  # Day 021 - Microsoft C# Self Invoking Method
+  # Day 022 - Microsoft C# Self Invoking Method
 
   ### What is self invoking method?
   
