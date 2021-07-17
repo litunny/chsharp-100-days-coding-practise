@@ -1,4 +1,4 @@
-  # Day 026 - Microsoft C# SortedDictionary<TKey,TValue> Class
+  # Day 027 - Microsoft C# SortedDictionary<TKey,TValue> Class
 
   ### What is SortedDictionary<TKey,TValue> Class?
   In C#, the SortedDictionary<TKey,TValue> class is used to represent the collection of key/value pairs. This pair is in sorted form and the sorting is done on the key. This class defined under System.Collections.Generic namespace. In SortedDictionary class, the keys are immutable, always unique, and cannot be null. You are allowed to use null in value if the type of value is of reference type. The SortedDictionary class provides the fastest insertion and removal operations for unsorted data. The key/value pair of the SortedDictionary class is retrieved by using the KeyValuePair structure.
